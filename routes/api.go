@@ -16,11 +16,11 @@ func LoadRouters() {
 
 	r.HandleFunc("/create-account", controllers.CreateUserAccount).Methods("POST")
 	r.HandleFunc("/login", controllers.LoginUser).Methods("POST")
-	r.HandleFunc("/get-users", controllers.LoginUser).Methods("POST")
 
 	subRouter := r.PathPrefix("/sub_router/").Subrouter()
 	subRouter.Use(middleware.JwtVerify)
 	subRouter.HandleFunc("/user", controllers.FetchUsers).Methods("GET")
+	r.HandleFunc("/get-users", controllers.LoginUser).Methods("POST")
 
 	log.Fatal(http.ListenAndServe("localhost:9000", r))
 

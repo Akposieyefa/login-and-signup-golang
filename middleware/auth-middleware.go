@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/akposieyefa/login-and-signup/models"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func JwtVerify(next http.Handler) http.Handler {
@@ -26,15 +27,21 @@ func JwtVerify(next http.Handler) http.Handler {
 		}
 		tk := &models.Claims{}
 
-		// _, err := jwt.ParseWithClaims(header, tk, func(token jwt.Claims) (interface{}, error) {
-		// 	return []byte("secret"), nil
-		// })
+		_, err := jwt.ParseWithClaims(header, tk, func(t *jwt.Token) (interface{}, error) {
+			return []byte("secret"), nil
+		})
 
-		// if err != nil {
-		// 	w.WriteHeader(http.StatusForbidden)
-		// 	json.NewEncoder(w).Encode(err)
-		// 	return
-		// }
+		if err != nil {
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(err)
+			return
+		}
+
+		if err != nil {
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(err)
+			return
+		}
 
 		ctx := context.WithValue(r.Context(), "user", tk)
 		next.ServeHTTP(w, r.WithContext(ctx))

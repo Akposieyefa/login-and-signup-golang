@@ -38,7 +38,7 @@ func CreateUserAccount(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"users":   createdUser,
+		"users":   user,
 		"message": "Success in creating users",
 		"success": true,
 	})
